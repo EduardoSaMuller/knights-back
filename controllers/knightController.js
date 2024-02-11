@@ -1,4 +1,4 @@
-const Knight = require('../models/Knight');
+const Knight = require('../models/KnightScheema');
 
 // Exibe a lista com todos os knights. 
 
