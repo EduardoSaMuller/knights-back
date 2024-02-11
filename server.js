@@ -1,17 +1,38 @@
-const express = require("express");
-const mongoose = require("mongoose");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const knightRoutes = require('./routes/knightRoutes');
+
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-//Conecção ao MongoDB;
+app.use(cors());
+app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017/knightsDB", {
-  userNewParser: true,
-  useUnifiedTopology: true,
+// Conecção ao banco de dados MongoDB
+mongoose.connect('mongodb://localhost:27017/knights', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err.message);
+  });
+
+// Configurar as rotas dos knights
+app.use(knightRoutes);
+
+// Rota de fallback para lidar com rotas não encontradas pela requisição
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
 });
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error: "));
-db.once("open", function () {
-  console.log("Connected to MongoDB");
+
+// Lidar com erros internos do servidor
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Internal server error' });
 });
 
+// Iniciar o servidor
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});

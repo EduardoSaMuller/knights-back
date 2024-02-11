@@ -1,10 +1,10 @@
-const Knight = require('../models/KnightScheema');
+const KnightScheema = require('../models/KnightScheema');
 
 // Exibe a lista com todos os knights. 
 
 const getAllKnights = async (req, res) => {
   try {
-    const knights = await Knight.find();
+    const knights = await KnightScheema.find();
     res.json(knights);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -15,7 +15,7 @@ const getAllKnights = async (req, res) => {
 
 const getHeroKnights = async (req, res) => {
   try {
-    const heroes = await Knight.find({ exp: { $gt: 0 } }); // apenas se knight tiver experiência maior que 0
+    const heroes = await KnightScheema.find({ exp: { $gt: 0 } }); // apenas se knight tiver experiência maior que 0
     res.json(heroes);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -48,7 +48,7 @@ const createKnight = async (req, res) => {
 
 const getKnightById = async (req, res) => {
   try {
-    const knight = await Knight.findById(req.params.id);
+    const knight = await KnightScheema.findById(req.params.id);
     if (!knight) {
       return res.status(404).json({ message: 'Knight not found' });
     }
@@ -62,7 +62,7 @@ const getKnightById = async (req, res) => {
 
 const updateKnight = async (req, res) => {
   try {
-    const updatedKnight = await Knight.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedKnight = await KnightScheema.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedKnight) {
       return res.status(404).json({ message: 'Knight not found' });
     }
@@ -76,7 +76,7 @@ const updateKnight = async (req, res) => {
 
 const deleteKnight = async (req, res) => {
   try {
-    const deletedKnight = await Knight.findByIdAndDelete(req.params.id);
+    const deletedKnight = await KnightScheema.findByIdAndDelete(req.params.id);
     if (!deletedKnight) {
       return res.status(404).json({ message: 'Knight not found' });
     }
