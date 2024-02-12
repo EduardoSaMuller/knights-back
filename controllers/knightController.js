@@ -1,54 +1,37 @@
-const KnightScheema = require('../models/KnightScheema');
-
-// Exibe a lista com todos os knights. 
+const Knight = require('../utils/db').Knight;
 
 const getAllKnights = async (req, res) => {
   try {
-    const knights = await KnightScheema.find();
+    const knights = await Knight.find();
     res.json(knights);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// Exibe uma lista contendo apenas os guerreiros que se tornaram heróis.
-
 const getHeroKnights = async (req, res) => {
   try {
-    const heroes = await KnightScheema.find({ exp: { $gt: 0 } }); // apenas se knight tiver experiência maior que 0
+    const heroes = await Knight.find({ exp: { $gt: 0 } });
     res.json(heroes);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// Cria um knight. 
-
-const createKnight = async (req, res) => {
-  const knight = new Knight({
-    name: req.body.name,
-    nickname: req.body.nickname,
-    birthday: req.body.birthday,
-    class: req.body.class,
-    weapons: req.body.weapons,
-    attributes: req.body.attributes,
-    keyAttribute: req.body.keyAttribute,
-    exp: req.body.exp
-  });
-
+const createKnight = async (req, res, next) => {
   try {
-    const newKnight = await knight.save();
-    res.status(201).json(newKnight);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    const { name, nickname, birthday, classe, weapons, attributes, keyAttribute } = req.body;
+    const knight = new Knight({ name, nickname, birthday, classe, weapons, attributes, keyAttribute });
+    await knight.save();
+    res.status(201).json({ message: 'Knight created successfully', knight });
+  } catch (error) {
+    next(error);
   }
-};
-
-//Mostra informações de um knight.
+}
 
 const getKnightById = async (req, res) => {
   try {
-    const knight = await KnightScheema.findById(req.params.id);
+    const knight = await Knight.findById(req.params.id);
     if (!knight) {
       return res.status(404).json({ message: 'Knight not found' });
     }
@@ -58,11 +41,9 @@ const getKnightById = async (req, res) => {
   }
 };
 
-// Permite alterar o apelido.
-
 const updateKnight = async (req, res) => {
   try {
-    const updatedKnight = await KnightScheema.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedKnight = await Knight.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedKnight) {
       return res.status(404).json({ message: 'Knight not found' });
     }
@@ -72,15 +53,12 @@ const updateKnight = async (req, res) => {
   }
 };
 
-// Remove um guerreiro. Esse guerreiro vai entrar no Hall of Heroes.
-
 const deleteKnight = async (req, res) => {
   try {
-    const deletedKnight = await KnightScheema.findByIdAndDelete(req.params.id);
+    const deletedKnight = await Knight.findByIdAndDelete(req.params.id);
     if (!deletedKnight) {
       return res.status(404).json({ message: 'Knight not found' });
     }
-    // Adicionar o guerreiro ao Hall of Heroes aqui, se necessário
     res.json({ message: 'Knight deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
