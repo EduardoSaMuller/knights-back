@@ -62,6 +62,10 @@ const knightSchema = new mongoose.Schema({
             "charisma",
         ],
     },
+    heroes: {
+        type: Boolean,
+        default: false 
+    },
     exp: Number,
 });
 

@@ -10,7 +10,8 @@ router.get('/heroes', knightController.getHeroKnights);
 
 // Rota para criar um novo knight
 router.post('/', knightController.createKnight);
-
+// Rota enviar um knight para herói
+router.post('/heroes', knightController.addKnightToHeroes);
 // Rota para obter informações de um knight específico
 router.get('/:id', knightController.getKnightById);
 
@@ -19,5 +20,8 @@ router.put('/:id', knightController.updateKnight);
 
 // Rota para remover um knight específico
 router.delete('/:id', knightController.deleteKnight);
+
+router.delete('/heroes/:id', knightController.deleteKnightHero);
+
 
 module.exports = router;

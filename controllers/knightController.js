@@ -11,12 +11,13 @@ const getAllKnights = async (req, res) => {
 
 const getHeroKnights = async (req, res) => {
   try {
-    const heroes = await Knight.find({ exp: { $gt: 0 } });
+    const heroes = await Knight.find({ heroes: true });
     res.json(heroes);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 const createKnight = async (req, res, next) => {
   try {
@@ -28,6 +29,18 @@ const createKnight = async (req, res, next) => {
     next(error);
   }
 }
+
+const addKnightToHeroes = async (req, res, next) => {
+  try {
+    const { name, nickname, birthday, classe, weapons, attributes, keyAttribute , heroes } = req.body;
+    const knight = new Knight({ name, nickname, birthday, classe, weapons, attributes, keyAttribute , heroes });
+    await knight.save();
+    res.status(201).json({ message: 'Hero created successfully', knight });
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 const getKnightById = async (req, res) => {
   try {
@@ -65,11 +78,25 @@ const deleteKnight = async (req, res) => {
   }
 };
 
+const deleteKnightHero = async (req, res) => {
+  try {
+    const deletedKnight = await Knight.findByIdAndDelete(req.params.id);
+    if (!deletedKnight) {
+      return res.status(404).json({ message: 'Knight not found' });
+    }
+    res.json({ message: 'Knight deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   getAllKnights,
   getHeroKnights,
   createKnight,
   getKnightById,
   updateKnight,
-  deleteKnight
+  deleteKnight,
+  addKnightToHeroes,
+  deleteKnightHero
 };
