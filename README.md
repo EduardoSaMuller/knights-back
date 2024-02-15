@@ -1,6 +1,22 @@
-# Backend do sistema knight, ao qual o usuário pode realizar os métodos de cadastro, delete, atualização e listagem dos knights que já estão no banco de dados
+# Knights Backend 
 
-# Desenvolvido com NodeJs e interligado ao banco de dados MongoDB. 
+Esse é o nosso sistema frontend ao qual gerenciamos o estado de nossos cavaleiros, listamos seus nomes, editamos seus 'nickNames', deletamos eles e enviamos para o salão dos heróis. Além de podermos utilizar de uma barra de filtro, bastando digitar o nome do seu cavaleiro .
 
-# Para rodar o projeto backend utilize  - npm start
-#
+## Funcionalidades 🚀
+
+- Ver a lista de cavaleiros
+- Adicionar novos cavaleiros
+- Atualizar informações de cavaleiros
+- Deletar nossos cavaleiros
+
+
+## Install the dependencies and start
+```bash
+npm install
+```
+
+```start
+
+npm start
+
+```
